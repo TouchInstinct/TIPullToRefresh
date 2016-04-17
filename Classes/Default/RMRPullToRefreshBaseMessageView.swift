@@ -116,7 +116,9 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
     
     override func didEndLoadingAnimation(hidden: Bool) {
         super.didEndLoadingAnimation(hidden)
-        self.logoHorizontalConstraint?.constant = 0.0
-        self.messageViewLeftConstaint?.constant = 0.0
+        if hidden {
+            self.logoHorizontalConstraint?.constant = 0.0
+            self.messageViewLeftConstaint?.constant = 0.0
+        }
     }
 }
