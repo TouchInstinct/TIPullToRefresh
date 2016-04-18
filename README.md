@@ -4,6 +4,14 @@
 Репозиторий pull to refresh контрола для UIScrollView, UITableView, UICollectionView для платформы iOS.
 
 
+
+<img src="https://dl.dropboxusercontent.com/u/69633554/RMRPullToRefresh/pullSuccessBottom.gif" width="262" height="468">
+<img src="https://dl.dropboxusercontent.com/u/69633554/RMRPullToRefresh/pullNoUpdatesTop.gif" width="262" height="468">
+<img src="https://dl.dropboxusercontent.com/u/69633554/RMRPullToRefresh/pullErrorTop.gif" width="262" height="468">
+
+Как установить?
+--------
+
 `pod 'RMRPullToRefresh', :git => "git@git.redmadrobot.com:im/RMRPullToRefresh.git"`
 
 Как добавить?
@@ -15,7 +23,7 @@ import RMRPullToRefresh
 var pullToRefresh: RMRPullToRefresh?
 
 pullToRefresh = RMRPullToRefresh(scrollView: tableView, 
-                                   position: .Top) { [weak self] _ in
+                                   position: .Top) { [weak self] _ in // .Top или .Bottom
             // Загрузка данных
             self?.service.load() { _ in
                 // Завершение загрузки
@@ -129,13 +137,14 @@ pullToRefresh?.backgroundColor = UIColor(red: 16.0/255.0,
                                         blue: 119.0/255.0, 
                                        alpha: 1.0)
 ```
+Для задания времени закрытия контрола (по умолчанию 0.0):
+```swift
+pullToRefresh?.setHideDelay(5.0, result: .Success) // .Success, .NoUpdates, .Error
+```
+
 
 Если не хотим скрывать контрол с ошибкой (не забудьте установить view для .Error):
 ```swift
 pullToRefresh?.hideWhenError = false
 ```
-
-Для задания времени закрытия контрола (по умолчанию 0.0):
-```swift
-pullToRefresh?.setHideDelay(5.0, result: .Success) // .Success, .NoUpdates, .Error
-```
+<img src="https://dl.dropboxusercontent.com/u/69633554/RMRPullToRefresh/pullErrorTopNoHide.gif" width="262" height="468">
