@@ -132,7 +132,12 @@ public class RMRPullToRefreshController: NSObject {
         updateContainerView(self.state)
         containerView.prepareForStopAnimations()
         
-        let delay = hideDelay(result)
+        var delay = hideDelay(result)
+        var afterDelay = 0.4
+        
+        if result == .Error && !hideWhenError {
+            delay = 0.0
+        }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { [weak self] in
             if self?.shouldHideWhenStopLoading() == true {
                 self?.resetContentInset()
@@ -145,14 +150,14 @@ public class RMRPullToRefreshController: NSObject {
                     }
                 }
                 self?.contentSizeWhenStartLoading = nil
-                self?.performSelector(#selector(self?.resetBackgroundViewHeightConstraint), withObject: nil, afterDelay: 0.4)
+                self?.performSelector(#selector(self?.resetBackgroundViewHeightConstraint), withObject: nil, afterDelay: afterDelay)
             }
-            self?.performSelector(#selector(self?.stopAllAnimations), withObject: nil, afterDelay: 0.4)
+            self?.performSelector(#selector(self?.stopAllAnimations), withObject: nil, afterDelay: afterDelay)
         })
     }
     
     public func setHideDelay(delay: NSTimeInterval, result: RMRPullToRefreshResultType) {
-        hideDelayValues[result] = delay
+        self.hideDelayValues[result] = delay
     }
     
     // MARK: - Private
@@ -207,6 +212,11 @@ public class RMRPullToRefreshController: NSObject {
         containerView.stopAllAnimations(shouldHideWhenStopLoading())
     }
     
+    @objc private func forceStopAllAnimations() {
+        stopped = true
+        containerView.stopAllAnimations(true)
+    }
+    
     @objc private func resetBackgroundViewHeightConstraint() {
         backgroundViewHeightConstraint?.constant = 0
     }
@@ -214,7 +224,7 @@ public class RMRPullToRefreshController: NSObject {
     private func scrollViewDidChangePanState(scrollView: UIScrollView, panState: UIGestureRecognizerState) {
         if panState == .Ended || panState == .Cancelled || panState == .Failed {
             
-            if state == .Loading {
+            if state == .Loading || !stopped {
                 return
             }
             
@@ -225,7 +235,7 @@ public class RMRPullToRefreshController: NSObject {
                 y = -(scrollView.contentSize.height - (scrollView.contentOffset.y + CGRectGetHeight(scrollView.bounds) + originalBottomInset));
             }
             
-            if y >= height && stopped {
+            if y >= height {
                 startLoading(y/height)
                 // inset
                 var inset = scrollView.contentInset
@@ -240,9 +250,15 @@ public class RMRPullToRefreshController: NSObject {
                 updateContainerView(state)
                 if !shouldHideWhenStopLoading() {
                     var inset = scrollView.contentInset
-                    inset.top = 0.0
-                    inset.bottom = 0.0
-                    setContentInset(inset, animated: true)
+                    if position == .Top && inset.top != originalTopInset {
+                        inset.top = originalTopInset
+                        setContentInset(inset, animated: true)
+                        self.performSelector(#selector(forceStopAllAnimations), withObject: nil, afterDelay: 0.2)
+                    } else if position == .Bottom && inset.top != originalBottomInset {
+                        inset.bottom = originalBottomInset
+                        setContentInset(inset, animated: true)
+                        self.performSelector(#selector(forceStopAllAnimations), withObject: nil, afterDelay: 0.2)
+                    }
                 }
             }
         }
@@ -259,6 +275,9 @@ public class RMRPullToRefreshController: NSObject {
     }
     
     private func scrollViewDidScroll(scrollView: UIScrollView, contentOffset: CGPoint) {
+        if !stopped {
+            return
+        }
         if scrollView.dragging && state == .Stopped {
             state = .Dragging
             updateContainerView(state)
@@ -327,10 +346,10 @@ public class RMRPullToRefreshController: NSObject {
         UIView.animateWithDuration(0.3,
             delay: 0.0,
             options: UIViewAnimationOptions.BeginFromCurrentState,
-            animations: { () -> Void in
-                self.scrollView?.contentInset = contentInset
-            }, completion: { (finished) -> Void in
-                self.changingContentInset = false
+            animations: {  [weak self]() -> Void in
+                self?.scrollView?.contentInset = contentInset
+            }, completion: {  [weak self](finished) -> Void in
+                self?.changingContentInset = false
         })
     }
     

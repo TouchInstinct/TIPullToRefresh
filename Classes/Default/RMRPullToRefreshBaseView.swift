@@ -96,8 +96,8 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
         didRotateToBottom = false
         let rotateTransform = CGAffineTransformRotate(logoImageView.transform, CGFloat(M_PI));
         if animated {
-            UIView .animateWithDuration(0.4, animations: {
-                self.logoImageView.transform = rotateTransform
+            UIView .animateWithDuration(0.4, animations: { [weak self] in
+                self?.logoImageView.transform = rotateTransform
             })
         } else {
             self.logoImageView.transform = rotateTransform
@@ -109,8 +109,8 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
         didRotateToTop = false
         let rotateTransform = CGAffineTransformRotate(logoImageView.transform, -CGFloat(M_PI));
         if animated {
-            UIView .animateWithDuration(0.4, animations: {
-                self.logoImageView.transform = rotateTransform
+            UIView .animateWithDuration(0.4, animations: { [weak self] in
+                self?.logoImageView.transform = rotateTransform
             })
         } else {
             self.logoImageView.transform = rotateTransform
@@ -148,8 +148,8 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
     override func didEndLoadingAnimation(hidden: Bool) {
         logoImageView.stopAnimating()
         logoImageView.layer.removeAllAnimations()
-        isConfigured = false
         didRotateToTop = false
+        isConfigured = !hidden
         animating = hidden
     }
 }

@@ -106,6 +106,19 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
     
     // MARK: - RMRPullToRefreshViewProtocol
     
+    override func beginLoadingAnimation() {
+        super.beginLoadingAnimation()
+        if self.logoHorizontalConstraint?.constant != 0.0 {
+            self.logoHorizontalConstraint?.constant = 0.0
+        }
+        if self.messageViewLeftConstaint?.constant != 0.0 {
+            self.messageViewLeftConstaint?.constant = 0.0
+        }
+        UIView.animateWithDuration(0.4) {[weak self] in
+            self?.layoutIfNeeded()
+        }        
+    }
+    
     override func willEndLoadingAnimation() {
         self.logoHorizontalConstraint?.constant = -CGRectGetWidth(self.bounds)/2.0 + CGRectGetWidth(self.logoImageView.bounds)
         self.messageViewLeftConstaint?.constant = -CGRectGetWidth(messageView.bounds) - 10.0
