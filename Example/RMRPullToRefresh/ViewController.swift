@@ -64,6 +64,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else if exampleType == .RedmadrobotTop || exampleType == .RedmadrobotBottom {
             redmadrobot()
         }
+        
+        pullToRefresh?.setHideDelay(5.0, result: .Success)
+        
+        pullToRefresh?.hideWhenError = false
     }
     
     // MARK: - Build example values

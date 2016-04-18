@@ -45,8 +45,8 @@ public class RMRPullToRefresh: NSObject {
         сontroller?.configureView(view, state: state, result: result)
     }
     
-    public func configureView(view :RMRPullToRefreshView) {
-        сontroller?.configureView(view, result: .Success)
+    public func configureView(view :RMRPullToRefreshView, result:RMRPullToRefreshResultType) {
+        сontroller?.configureView(view, result: result)
     }
     
     public func setupDefaultSettings() {

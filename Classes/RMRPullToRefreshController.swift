@@ -208,7 +208,9 @@ public class RMRPullToRefreshController: NSObject {
     }
     
     @objc private func stopAllAnimations() {
-        stopped = true
+        if shouldHideWhenStopLoading() {
+            stopped = true
+        }
         containerView.stopAllAnimations(shouldHideWhenStopLoading())
     }
     
@@ -224,7 +226,7 @@ public class RMRPullToRefreshController: NSObject {
     private func scrollViewDidChangePanState(scrollView: UIScrollView, panState: UIGestureRecognizerState) {
         if panState == .Ended || panState == .Cancelled || panState == .Failed {
             
-            if state == .Loading || !stopped {
+            if state == .Loading || (shouldHideWhenStopLoading() && !stopped) {
                 return
             }
             
@@ -248,18 +250,6 @@ public class RMRPullToRefreshController: NSObject {
             } else {
                 state = .Stopped
                 updateContainerView(state)
-                if !shouldHideWhenStopLoading() {
-                    var inset = scrollView.contentInset
-                    if position == .Top && inset.top != originalTopInset {
-                        inset.top = originalTopInset
-                        setContentInset(inset, animated: true)
-                        self.performSelector(#selector(forceStopAllAnimations), withObject: nil, afterDelay: 0.2)
-                    } else if position == .Bottom && inset.top != originalBottomInset {
-                        inset.bottom = originalBottomInset
-                        setContentInset(inset, animated: true)
-                        self.performSelector(#selector(forceStopAllAnimations), withObject: nil, afterDelay: 0.2)
-                    }
-                }
             }
         }
     }
