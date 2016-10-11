@@ -11,23 +11,23 @@ import UIKit
 class TableViewController: UITableViewController {
 
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
         
-        if let identifier = segue.identifier, let controller = segue.destinationViewController as? ViewController {
+        if let identifier = segue.identifier, let controller = segue.destination as? ViewController {
             switch identifier {
             case "perekrestok_top":
-                controller.exampleType = .PerekrestokTop
+                controller.exampleType = .perekrestokTop
             case "perekrestok_bottom":
-                controller.exampleType = .PerekrestokBottom
+                controller.exampleType = .perekrestokBottom
             case "beeline_top":
-                controller.exampleType = .BeelineTop
+                controller.exampleType = .beelineTop
             case "beeline_bottom":
-                controller.exampleType = .BeelineBottom
+                controller.exampleType = .beelineBottom
             case "redmadrobot_top":
-                controller.exampleType = .RedmadrobotTop
+                controller.exampleType = .redmadrobotTop
             case "redmadrobot_bottom":
-                controller.exampleType = .RedmadrobotBottom
+                controller.exampleType = .redmadrobotBottom
             default:
                 break
             }

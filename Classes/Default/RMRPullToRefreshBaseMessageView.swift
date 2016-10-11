@@ -33,16 +33,16 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
     
     func configureLabel() {
         let label = UILabel(frame: self.messageView.bounds)
-        label.textColor = UIColor.whiteColor()
-        label.textAlignment = .Center
+        label.textColor = UIColor.white
+        label.textAlignment = .center
         label.text = messageText()
         messageView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        for attribute in [NSLayoutAttribute.Top, NSLayoutAttribute.Right, NSLayoutAttribute.Left, NSLayoutAttribute.Bottom] {
+        for attribute in [NSLayoutAttribute.top, NSLayoutAttribute.right, NSLayoutAttribute.left, NSLayoutAttribute.bottom] {
             messageView.addConstraint(NSLayoutConstraint(item: label,
                                                     attribute: attribute,
-                                                    relatedBy: NSLayoutRelation.Equal,
+                                                    relatedBy: NSLayoutRelation.equal,
                                                        toItem: messageView,
                                                     attribute: attribute,
                                                    multiplier: 1,
@@ -58,36 +58,36 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
         messageView.translatesAutoresizingMaskIntoConstraints = false
         
         let heightConstraint = NSLayoutConstraint(item: messageView,
-                                                  attribute: NSLayoutAttribute.Height,
-                                                  relatedBy: NSLayoutRelation.Equal,
+                                                  attribute: NSLayoutAttribute.height,
+                                                  relatedBy: NSLayoutRelation.equal,
                                                   toItem: nil,
-                                                  attribute: NSLayoutAttribute.NotAnAttribute,
+                                                  attribute: NSLayoutAttribute.notAnAttribute,
                                                   multiplier: 1,
                                                   constant: 30)
         
         let widthConstraint = NSLayoutConstraint(item: messageView,
-                                                 attribute: NSLayoutAttribute.Width,
-                                                 relatedBy: NSLayoutRelation.Equal,
+                                                 attribute: NSLayoutAttribute.width,
+                                                 relatedBy: NSLayoutRelation.equal,
                                                  toItem: nil,
-                                                 attribute: NSLayoutAttribute.NotAnAttribute,
+                                                 attribute: NSLayoutAttribute.notAnAttribute,
                                                  multiplier: 1,
                                                  constant: 150)
         
         messageView.addConstraints([heightConstraint, widthConstraint])
         
         let verticalConstraint = NSLayoutConstraint(item: messageView,
-                                                    attribute: .CenterY,
-                                                    relatedBy: NSLayoutRelation.Equal,
+                                                    attribute: .centerY,
+                                                    relatedBy: NSLayoutRelation.equal,
                                                     toItem: self,
-                                                    attribute: .CenterY,
+                                                    attribute: .centerY,
                                                     multiplier: 1,
                                                     constant: 0)
         
         let leftConstraint = NSLayoutConstraint(item: messageView,
-                                                attribute: .Left,
-                                                relatedBy: NSLayoutRelation.Equal,
+                                                attribute: .left,
+                                                relatedBy: NSLayoutRelation.equal,
                                                 toItem: self,
-                                                attribute: .Right,
+                                                attribute: .right,
                                                 multiplier: 1,
                                                 constant: 0)
         
@@ -97,7 +97,7 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
     }
     
     func messageBackgroundColor() -> UIColor {
-        return UIColor.whiteColor()
+        return UIColor.white
     }
     
     func messageText() -> String? {
@@ -114,20 +114,20 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
         if self.messageViewLeftConstaint?.constant != 0.0 {
             self.messageViewLeftConstaint?.constant = 0.0
         }
-        UIView.animateWithDuration(0.4) {[weak self] in
+        UIView.animate(withDuration: 0.4, animations: {[weak self] in
             self?.layoutIfNeeded()
-        }        
+        })         
     }
     
     override func willEndLoadingAnimation() {
-        self.logoHorizontalConstraint?.constant = -CGRectGetWidth(self.bounds)/2.0 + CGRectGetWidth(self.logoImageView.bounds)
-        self.messageViewLeftConstaint?.constant = -CGRectGetWidth(messageView.bounds) - 10.0
-        UIView.animateWithDuration(0.4) {[weak self] in
+        self.logoHorizontalConstraint?.constant = -self.bounds.width/2.0 + self.logoImageView.bounds.width
+        self.messageViewLeftConstaint?.constant = -messageView.bounds.width - 10.0
+        UIView.animate(withDuration: 0.4, animations: {[weak self] in
             self?.layoutIfNeeded()
-        }
+        }) 
     }
     
-    override func didEndLoadingAnimation(hidden: Bool) {
+    override func didEndLoadingAnimation(_ hidden: Bool) {
         super.didEndLoadingAnimation(hidden)
         if hidden {
             self.logoHorizontalConstraint?.constant = 0.0

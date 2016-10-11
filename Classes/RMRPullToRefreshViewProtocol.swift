@@ -11,13 +11,13 @@ import UIKit
 public protocol RMRPullToRefreshViewProtocol {
    
     // Begin Loading
-    func prepareForLoadingAnimation(startProgress: CGFloat)
+    func prepareForLoadingAnimation(_ startProgress: CGFloat)
     func beginLoadingAnimation()
     
     // End Loading
     func willEndLoadingAnimation()
-    func didEndLoadingAnimation(hidden: Bool)
+    func didEndLoadingAnimation(_ hidden: Bool)
     
     // Dragging
-    func didChangeDraggingProgress(progress: CGFloat)
+    func didChangeDraggingProgress(_ progress: CGFloat)
 }

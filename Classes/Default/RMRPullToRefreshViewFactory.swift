@@ -8,15 +8,15 @@
 
 import UIKit
 
-public class RMRPullToRefreshViewFactory: NSObject {
+open class RMRPullToRefreshViewFactory: NSObject {
 
-    class func create(result: RMRPullToRefreshResultType) -> RMRPullToRefreshView? {
+    class func create(_ result: RMRPullToRefreshResultType) -> RMRPullToRefreshView? {
         switch result {
-        case .Success:
+        case .success:
             return RMRPullToRefreshSuccessView(result: result)
-        case .NoUpdates:
+        case .noUpdates:
             return RMRPullToRefreshNoUpdatesView(result: result)
-        case .Error:
+        case .error:
             return RMRPullToRefreshErrorView(result: result)
         }
         

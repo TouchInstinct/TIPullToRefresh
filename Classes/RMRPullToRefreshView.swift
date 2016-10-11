@@ -8,18 +8,18 @@
 
 import UIKit
 
-public class RMRPullToRefreshView: UIView, RMRPullToRefreshViewProtocol {
+open class RMRPullToRefreshView: UIView, RMRPullToRefreshViewProtocol {
     
     var pullToRefreshIsLoading = false
     
     // Begin Loading
-    public func prepareForLoadingAnimation(startProgress: CGFloat) {}
-    public func beginLoadingAnimation() {}
+    open func prepareForLoadingAnimation(_ startProgress: CGFloat) {}
+    open func beginLoadingAnimation() {}
     
     // End Loading
-    public func willEndLoadingAnimation() {}
-    public func didEndLoadingAnimation(hidden: Bool) {}
+    open func willEndLoadingAnimation() {}
+    open func didEndLoadingAnimation(_ hidden: Bool) {}
     
     // Dragging
-    public func didChangeDraggingProgress(progress: CGFloat) {}
+    open func didChangeDraggingProgress(_ progress: CGFloat) {}
 }

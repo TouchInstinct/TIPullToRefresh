@@ -16,23 +16,23 @@ class PerekrestokView: RMRPullToRefreshView {
     var fromValue: CGFloat = 0.0
     
     class func XIB_VIEW() -> PerekrestokView? {
-        let subviewArray = NSBundle.mainBundle().loadNibNamed("PerekrestokView", owner: self, options: nil)
-        return subviewArray.first as? PerekrestokView
+        let subviewArray = Bundle.main.loadNibNamed("PerekrestokView", owner: self, options: nil)
+        return subviewArray?.first as? PerekrestokView
     }
     
     // MARK: - Private
     
-    func angle(progress: CGFloat) -> CGFloat  {
+    func angle(_ progress: CGFloat) -> CGFloat  {
         return -CGFloat(M_PI)/progress
     }
     
     // MARK: - RMRPullToRefreshViewProtocol
     
-    override func didChangeDraggingProgress(progress: CGFloat) {
-        logoImageView.transform = CGAffineTransformMakeRotation(angle(progress));
+    override func didChangeDraggingProgress(_ progress: CGFloat) {
+        logoImageView.transform = CGAffineTransform(rotationAngle: angle(progress));
     }
     
-    override func prepareForLoadingAnimation(startProgress: CGFloat) {
+    override func prepareForLoadingAnimation(_ startProgress: CGFloat) {
         fromValue = angle(startProgress)
     }
     
@@ -43,10 +43,10 @@ class PerekrestokView: RMRPullToRefreshView {
         rotationAnimation.duration = 0.9
         rotationAnimation.repeatCount = HUGE
         
-        self.logoImageView.layer.addAnimation(rotationAnimation, forKey: "transformAnimation")
+        self.logoImageView.layer.add(rotationAnimation, forKey: "transformAnimation")
     }
     
-    override func didEndLoadingAnimation(hidden: Bool) {
-        self.logoImageView.layer.removeAnimationForKey("transformAnimation")
+    override func didEndLoadingAnimation(_ hidden: Bool) {
+        self.logoImageView.layer.removeAnimation(forKey: "transformAnimation")
     }
 }

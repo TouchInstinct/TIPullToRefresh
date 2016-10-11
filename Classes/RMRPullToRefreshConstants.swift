@@ -9,20 +9,20 @@
 import UIKit
 
 public enum RMRPullToRefreshPosition: Int {
-    case Top
-    case Bottom
+    case top
+    case bottom
 }
 
 public enum RMRPullToRefreshState: Int {
-    case Stopped
-    case Dragging
-    case Loading
+    case stopped
+    case dragging
+    case loading
 }
 
 public enum RMRPullToRefreshResultType: Int {
-    case Success = 0
-    case NoUpdates
-    case Error
+    case success = 0
+    case noUpdates
+    case error
 }
 
 public struct RMRPullToRefreshConstants {
@@ -36,5 +36,5 @@ public struct RMRPullToRefreshConstants {
     }
     
     static let DefaultHeight = CGFloat(90.0)
-    static let DefaultBackgroundColor = UIColor.whiteColor()
+    static let DefaultBackgroundColor = UIColor.white
 }

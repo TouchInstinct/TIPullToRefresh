@@ -10,14 +10,14 @@ import UIKit
 import RMRPullToRefresh
 
 enum AnimationStage: Int {
-    case Stage1 // big medium small
-    case Stage2 // big medium
-    case Stage3 // big
-    case Stage4 //
-    case Stage5 // big
-    case Stage6 // big medium
+    case stage1 // big medium small
+    case stage2 // big medium
+    case stage3 // big
+    case stage4 //
+    case stage5 // big
+    case stage6 // big medium
     
-    static var count: Int { return AnimationStage.Stage6.hashValue + 1}
+    static var count: Int { return AnimationStage.stage6.hashValue + 1}
 }
 
 class BeelineView: RMRPullToRefreshView {
@@ -30,22 +30,22 @@ class BeelineView: RMRPullToRefreshView {
     var animationStage: AnimationStage?
     
     class func XIB_VIEW() -> BeelineView? {
-        let subviewArray = NSBundle.mainBundle().loadNibNamed("BeelineView", owner: self, options: nil)
-        return subviewArray.first as? BeelineView
+        let subviewArray = Bundle.main.loadNibNamed("BeelineView", owner: self, options: nil)
+        return subviewArray?.first as? BeelineView
     }
 
     // MARK: - Private
     
-    func hideBigIcons(hide: Bool) {
-        for iV in bigIcons { iV.hidden = hide }
+    func hideBigIcons(_ hide: Bool) {
+        for iV in bigIcons { iV.isHidden = hide }
     }
     
-    func hideMediumIcons(hide: Bool) {
-        for iV in mediumIcons { iV.hidden = hide }
+    func hideMediumIcons(_ hide: Bool) {
+        for iV in mediumIcons { iV.isHidden = hide }
     }
     
-    func hideSmallIcons(hide: Bool) {
-        for iV in smallIcons { iV.hidden = hide }
+    func hideSmallIcons(_ hide: Bool) {
+        for iV in smallIcons { iV.isHidden = hide }
     }
     
     @objc func executeAnimation() {
@@ -54,20 +54,20 @@ class BeelineView: RMRPullToRefreshView {
             return
         }
         
-        hideBigIcons(animationStage == .Stage4)
-        hideMediumIcons(animationStage == .Stage3 || animationStage == .Stage4 || animationStage == .Stage5)
-        hideSmallIcons(animationStage != .Stage1)
+        hideBigIcons(animationStage == .stage4)
+        hideMediumIcons(animationStage == .stage3 || animationStage == .stage4 || animationStage == .stage5)
+        hideSmallIcons(animationStage != .stage1)
         
         if let stage = animationStage {
             animationStage = AnimationStage(rawValue: (stage.rawValue+1)%AnimationStage.count)
         }
         
-        performSelector(#selector(executeAnimation), withObject: nil, afterDelay: 0.4)
+        perform(#selector(executeAnimation), with: nil, afterDelay: 0.4)
     }
     
     // MARK: - RMRPullToRefreshViewProtocol
     
-    override func didChangeDraggingProgress(progress: CGFloat) {
+    override func didChangeDraggingProgress(_ progress: CGFloat) {
         hideBigIcons(progress < 0.33)
         hideMediumIcons(progress < 0.66)
         hideSmallIcons(progress < 0.99)
@@ -75,11 +75,11 @@ class BeelineView: RMRPullToRefreshView {
     
     override func beginLoadingAnimation() {
         animationIsCanceled = false
-        animationStage = .Stage1
+        animationStage = .stage1
         executeAnimation()
     }
     
-    override func didEndLoadingAnimation(hidden: Bool) {
+    override func didEndLoadingAnimation(_ hidden: Bool) {
         animationIsCanceled = true
     }
 }

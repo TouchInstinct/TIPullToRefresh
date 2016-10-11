@@ -8,64 +8,69 @@
 
 import UIKit
 
-public class RMRPullToRefresh: NSObject {
+open class RMRPullToRefresh: NSObject {
 
-    private var сontroller: RMRPullToRefreshController?
+    fileprivate var сontroller: RMRPullToRefreshController?
     
-    public var height : CGFloat = RMRPullToRefreshConstants.DefaultHeight {
+    open var height : CGFloat = RMRPullToRefreshConstants.DefaultHeight {
         didSet {
             сontroller?.configureHeight(height)
         }
     }
     
-    public var backgroundColor : UIColor = RMRPullToRefreshConstants.DefaultBackgroundColor {
+    open var backgroundColor : UIColor = RMRPullToRefreshConstants.DefaultBackgroundColor {
         didSet {
             сontroller?.configureBackgroundColor(backgroundColor)
         }
     }
     
-    public var hideWhenError: Bool = true {
+    open var hideWhenError: Bool = true {
         didSet {
             сontroller?.hideWhenError = hideWhenError
         }
     }
     
-    public init(scrollView: UIScrollView, position:RMRPullToRefreshPosition, actionHandler: () -> Void) {
+    public init(
+        scrollView: UIScrollView,
+        position:RMRPullToRefreshPosition,
+        actionHandler: @escaping () -> Void)
+    {
         super.init()
         
-        let controller = RMRPullToRefreshController(scrollView: scrollView,
-                                                    position: position,
-                                                    actionHandler: actionHandler)
+        let controller = RMRPullToRefreshController(
+            scrollView: scrollView,
+            position: position,
+            actionHandler: actionHandler)
         
         scrollView.addSubview(controller.containerView)
         self.сontroller = controller
     }
     
-    public func configureView(view :RMRPullToRefreshView, state:RMRPullToRefreshState, result:RMRPullToRefreshResultType) {
+    open func configureView(_ view :RMRPullToRefreshView, state:RMRPullToRefreshState, result:RMRPullToRefreshResultType) {
         сontroller?.configureView(view, state: state, result: result)
     }
     
-    public func configureView(view :RMRPullToRefreshView, result:RMRPullToRefreshResultType) {
+    open func configureView(_ view :RMRPullToRefreshView, result:RMRPullToRefreshResultType) {
         сontroller?.configureView(view, result: result)
     }
     
-    public func setupDefaultSettings() {
+    open func setupDefaultSettings() {
         сontroller?.setupDefaultSettings()
     }
 
-    public func startLoading() {
+    open func startLoading() {
         сontroller?.startLoading()
     }
     
-    public func stopLoading() {
-        stopLoading(.Success)
+    open func stopLoading() {
+        stopLoading(.success)
     }
     
-    public func stopLoading(result:RMRPullToRefreshResultType) {
+    open func stopLoading(_ result:RMRPullToRefreshResultType) {
         сontroller?.stopLoading(result)
     }
     
-    public func setHideDelay(delay: NSTimeInterval, result: RMRPullToRefreshResultType) {
+    open func setHideDelay(_ delay: TimeInterval, result: RMRPullToRefreshResultType) {
         сontroller?.setHideDelay(delay, result: result)
     }
 }

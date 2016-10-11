@@ -8,39 +8,39 @@
 
 import UIKit
 
-public class RMRPullToRefreshContainerView: UIView {
+open class RMRPullToRefreshContainerView: UIView {
 
     var currentView: RMRPullToRefreshView?
     
     var storage = [String: RMRPullToRefreshView]()
 
-    public func configureView(view:RMRPullToRefreshView, state:RMRPullToRefreshState, result:RMRPullToRefreshResultType) {
+    open func configureView(_ view:RMRPullToRefreshView, state:RMRPullToRefreshState, result:RMRPullToRefreshResultType) {
         let key = storageKey(state, result:result)
         self.storage[key] = view
     }
     
-    func updateView(state: RMRPullToRefreshState, result: RMRPullToRefreshResultType) {
+    func updateView(_ state: RMRPullToRefreshState, result: RMRPullToRefreshResultType) {
 
         clear()
         if let view = obtainView(state, result: result) {
             view.translatesAutoresizingMaskIntoConstraints = false
             addSubview(view)
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.Left))
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.Top))
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.Right))
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.Bottom))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.left))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.top))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.right))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.bottom))
             view.layoutIfNeeded()
             self.currentView = view
         }
     }
     
-    func dragging(progress: CGFloat) {
+    func dragging(_ progress: CGFloat) {
         if let view = self.currentView {
             view.didChangeDraggingProgress(progress)
         }
     }
     
-    func startLoadingAnimation(startProgress: CGFloat) {
+    func startLoadingAnimation(_ startProgress: CGFloat) {
         if let view = self.currentView {
             if !view.pullToRefreshIsLoading {
                 view.prepareForLoadingAnimation(startProgress)
@@ -56,7 +56,7 @@ public class RMRPullToRefreshContainerView: UIView {
         }
     }
     
-    func stopAllAnimations(hidden: Bool) {
+    func stopAllAnimations(_ hidden: Bool) {
         for view in storage.values {
             view.didEndLoadingAnimation(hidden)
             view.pullToRefreshIsLoading = false
@@ -72,19 +72,19 @@ public class RMRPullToRefreshContainerView: UIView {
         self.currentView = nil
     }
     
-    func obtainView(state: RMRPullToRefreshState, result: RMRPullToRefreshResultType) -> RMRPullToRefreshView? {
+    func obtainView(_ state: RMRPullToRefreshState, result: RMRPullToRefreshResultType) -> RMRPullToRefreshView? {
         let key = storageKey(state, result:result)
         return self.storage[key]
     }
     
-    func storageKey(state: RMRPullToRefreshState, result: RMRPullToRefreshResultType) -> String {
+    func storageKey(_ state: RMRPullToRefreshState, result: RMRPullToRefreshResultType) -> String {
         return String(state.rawValue) + "_" + String(result.rawValue)
     }
     
     
     // MARK: - Constraint
     
-    func constraint(superview: UIView, subview: UIView, attribute: NSLayoutAttribute) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item: subview, attribute: attribute, relatedBy: NSLayoutRelation.Equal, toItem: superview, attribute: attribute, multiplier: 1, constant: 0)
+    func constraint(_ superview: UIView, subview: UIView, attribute: NSLayoutAttribute) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item: subview, attribute: attribute, relatedBy: NSLayoutRelation.equal, toItem: superview, attribute: attribute, multiplier: 1, constant: 0)
     }
 }
