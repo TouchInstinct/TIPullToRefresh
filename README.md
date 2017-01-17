@@ -12,7 +12,7 @@
 Как установить?
 --------
 
-`pod 'RMRPullToRefresh', :git => "git@git.redmadrobot.com:im/RMRPullToRefresh.git"`
+`pod 'RMRPullToRefresh', :git => "git@git.redmadrobot.com:helper-ios/RMRPullToRefresh.git"`
 
 Как добавить?
 --------
