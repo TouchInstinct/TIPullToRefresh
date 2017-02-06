@@ -73,4 +73,8 @@ open class RMRPullToRefresh: NSObject {
     open func setHideDelay(_ delay: TimeInterval, result: RMRPullToRefreshResultType) {
         сontroller?.setHideDelay(delay, result: result)
     }
+    
+    open var state: RMRPullToRefreshState {
+        return сontroller?.state ?? .stopped
+    }
 }
