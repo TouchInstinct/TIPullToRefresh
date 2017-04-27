@@ -46,6 +46,14 @@ open class RMRPullToRefresh: NSObject {
         self.сontroller = controller
     }
     
+    /// Метод нужно вызывать в deinit экрана, в котором используется pull-to-refresh.
+    ///
+    /// Это временное решение для избежания краша из-за KVO-наблюдателей на scroll view
+    /// (при уничтожении скролла и экрана, в котором он лежит).
+    open func unsubscribeFromBindings() {
+        сontroller?.unsubscribeFromScrollViewEvents()
+    }
+    
     open func configureView(_ view :RMRPullToRefreshView, state:RMRPullToRefreshState, result:RMRPullToRefreshResultType) {
         сontroller?.configureView(view, state: state, result: result)
     }
