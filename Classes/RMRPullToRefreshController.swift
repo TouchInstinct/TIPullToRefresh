@@ -77,10 +77,6 @@ open class RMRPullToRefreshController: NSObject {
         self.subscribeOnScrollViewEvents()
     }
     
-    deinit {
-        self.unsubscribeFromScrollViewEvents()
-    }
-    
     fileprivate func configureBackgroundView(_ backgroundView: UIView) {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         scrollView?.addSubview(backgroundView)
