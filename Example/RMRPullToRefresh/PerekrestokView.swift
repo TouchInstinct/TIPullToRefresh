@@ -23,7 +23,7 @@ class PerekrestokView: RMRPullToRefreshView {
     // MARK: - Private
     
     func angle(_ progress: CGFloat) -> CGFloat  {
-        return -CGFloat(M_PI)/progress
+        return -.pi/progress
     }
     
     // MARK: - RMRPullToRefreshViewProtocol
@@ -39,7 +39,7 @@ class PerekrestokView: RMRPullToRefreshView {
     override func beginLoadingAnimation() {
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
         rotationAnimation.fromValue = fromValue
-        rotationAnimation.byValue = 2*M_PI
+        rotationAnimation.byValue = 2*Double.pi
         rotationAnimation.duration = 0.9
         rotationAnimation.repeatCount = HUGE
         

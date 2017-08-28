@@ -85,7 +85,7 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
     
     func resetTransformIfNecessary() {
         if !isConfigured {
-            logoImageView.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+            logoImageView.transform = CGAffineTransform(rotationAngle: .pi)
             didRotateToBottom = true
             isConfigured = true
         }
@@ -94,7 +94,7 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
     func makeIncreasePulling(_ animated: Bool) {
         didRotateToTop = true
         didRotateToBottom = false
-        let rotateTransform = logoImageView.transform.rotated(by: CGFloat(M_PI));
+        let rotateTransform = logoImageView.transform.rotated(by: .pi);
         if animated {
             UIView .animate(withDuration: 0.4, animations: { [weak self] in
                 self?.logoImageView.transform = rotateTransform
@@ -107,7 +107,7 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
     func makeDecreasePulling(_ animated: Bool) {
         didRotateToBottom = true
         didRotateToTop = false
-        let rotateTransform = logoImageView.transform.rotated(by: -CGFloat(M_PI));
+        let rotateTransform = logoImageView.transform.rotated(by: -.pi);
         if animated {
             UIView .animate(withDuration: 0.4, animations: { [weak self] in
                 self?.logoImageView.transform = rotateTransform
