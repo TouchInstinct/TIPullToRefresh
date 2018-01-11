@@ -7,26 +7,6 @@
 //
 
 import UIKit
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 open class RMRPullToRefreshController: NSObject {
 
@@ -41,7 +21,6 @@ open class RMRPullToRefreshController: NSObject {
     var backgroundViewTopConstraint: NSLayoutConstraint?
     
     var stopped = true
-    var subscribing = false
     
     var actionHandler: (() -> Void)!
     
@@ -59,6 +38,12 @@ open class RMRPullToRefreshController: NSObject {
     var hideDelayValues = [RMRPullToRefreshResultType: TimeInterval]()
     
     open var hideWhenError: Bool = true
+    
+    // MARK: - Observation
+    
+    private var contentOffsetObservation: NSKeyValueObservation?
+    private var contentSizeObservation: NSKeyValueObservation?
+    private var panStateObservation: NSKeyValueObservation?
     
     // MARK: - Init
     
@@ -319,8 +304,10 @@ open class RMRPullToRefreshController: NSObject {
         } else {
             constant = contentOffsetY + contentInset.bottom
         }
-        if constant > 0 && constant > backgroundViewHeightConstraint?.constant {
-            backgroundViewHeightConstraint?.constant = constant
+        if let backgroundViewHeightConstraint = backgroundViewHeightConstraint,
+            constant > 0,
+            constant > backgroundViewHeightConstraint.constant {
+            backgroundViewHeightConstraint.constant = constant
         }
     }
     
@@ -391,41 +378,28 @@ open class RMRPullToRefreshController: NSObject {
     // MARK: - KVO
 
     open func subscribeOnScrollViewEvents() {
-        if !subscribing, let scrollView = self.scrollView {
-            scrollView.addObserver(self, forKeyPath: RMRPullToRefreshConstants.KeyPaths.ContentOffset, options: .new, context: nil)
-            scrollView.addObserver(self, forKeyPath: RMRPullToRefreshConstants.KeyPaths.ContentSize, options: .new, context: nil)
-            scrollView.addObserver(self, forKeyPath: RMRPullToRefreshConstants.KeyPaths.PanState, options: .new, context: nil)
-            subscribing = true
+        guard let scrollView = scrollView else {
+            return
+        }
+        
+        self.contentOffsetObservation = scrollView.observe(\.contentOffset, options: [.new]) { scrollView, change in
+            guard let newContentOffset = change.newValue else { return }
+            self.scrollViewDidScroll(scrollView, contentOffset: newContentOffset)
+        }
+        
+        self.contentSizeObservation = scrollView.observe(\.contentSize, options: [.new]) { scrollView, change in
+            guard let newContentSize = change.newValue else { return }
+            self.scrollViewDidChangeContentSize(scrollView, contentSize: newContentSize)
+        }
+        
+        self.panStateObservation = scrollView.panGestureRecognizer.observe(\.state, options: [.new]) { panGestureRecognizer, _ in
+            self.scrollViewDidChangePanState(scrollView, panState: panGestureRecognizer.state)
         }
     }
     
     open func unsubscribeFromScrollViewEvents() {
-        if subscribing, let scrollView = self.containerView.superview {
-            scrollView.removeObserver(self, forKeyPath: RMRPullToRefreshConstants.KeyPaths.ContentOffset)
-            scrollView.removeObserver(self, forKeyPath: RMRPullToRefreshConstants.KeyPaths.ContentSize)
-            scrollView.removeObserver(self, forKeyPath: RMRPullToRefreshConstants.KeyPaths.PanState)
-            subscribing = false
-        }
+        contentOffsetObservation?.invalidate()
+        contentSizeObservation?.invalidate()
+        panStateObservation?.invalidate()
     }
-    
-    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == RMRPullToRefreshConstants.KeyPaths.ContentOffset {
-            if let newContentOffset = (change?[NSKeyValueChangeKey.newKey] as? NSValue)?.cgPointValue, let scrollView = self.scrollView {
-                scrollViewDidScroll(scrollView, contentOffset:newContentOffset)
-            }
-        } else if keyPath == RMRPullToRefreshConstants.KeyPaths.ContentSize {
-            if let newContentSize = (change?[NSKeyValueChangeKey.newKey] as? NSValue)?.cgSizeValue, let scrollView = self.scrollView {
-                if checkContentSize(scrollView) {
-                    scrollViewDidChangeContentSize(scrollView, contentSize: newContentSize)
-                }
-            }
-        } else if keyPath == RMRPullToRefreshConstants.KeyPaths.PanState {
-            if let rawValue = change?[NSKeyValueChangeKey.newKey] as? Int {
-                if let state = UIGestureRecognizerState(rawValue: rawValue), let scrollView = self.scrollView {
-                    scrollViewDidChangePanState(scrollView, panState: state)
-                }
-            }
-        }
-    }
-    
 }
