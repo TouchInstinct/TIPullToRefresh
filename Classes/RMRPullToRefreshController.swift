@@ -69,23 +69,29 @@ open class RMRPullToRefreshController: NSObject {
     }
     
     private func addBackgroundViewConstraints(_ backgroundView: UIView) {
-        // Constraints
-        self.backgroundViewHeightConstraint = NSLayoutConstraint(item: backgroundView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 0)
-        backgroundView.addConstraint(self.backgroundViewHeightConstraint!)
+        guard let scrollView = scrollView, let position = position else {
+            return
+        }
+    
+        let backgroundViewHeightConstraint = backgroundView.heightAnchor.constraint(equalToConstant: 0)
+        backgroundViewHeightConstraint.isActive = true
+        self.backgroundViewHeightConstraint = backgroundViewHeightConstraint
         
-        scrollView?.addConstraint(NSLayoutConstraint(item: backgroundView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: scrollView, attribute: NSLayoutAttribute.width, multiplier: 1, constant: 0))
+        backgroundView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         
-        if position == .top {
-            scrollView?.addConstraint(NSLayoutConstraint(item: backgroundView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: scrollView, attribute: NSLayoutAttribute.top, multiplier: 1, constant: 0))
-        } else if position == .bottom, let scrollView = self.scrollView {
+        switch position {
+        case .top:
+            backgroundView.bottomAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        case .bottom:
             let constant = max(scrollView.contentSize.height, scrollView.bounds.height)
-            self.backgroundViewTopConstraint = NSLayoutConstraint(item: backgroundView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: scrollView, attribute: NSLayoutAttribute.top, multiplier: 1, constant: constant)
-            scrollView.addConstraint(self.backgroundViewTopConstraint!)
+            let backgroundViewTopConstraint = backgroundView.topAnchor.constraint(
+                equalTo: scrollView.bottomAnchor, constant: constant)
+            backgroundViewTopConstraint.isActive = true
+            self.backgroundViewTopConstraint = backgroundViewTopConstraint
         }
     }
     
     private func configureHeight() {
-        
         if let scrollView = self.scrollView {
             self.originalTopInset = scrollView.contentInset.top
             self.originalBottomInset = scrollView.contentInset.bottom
