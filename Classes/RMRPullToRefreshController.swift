@@ -62,13 +62,13 @@ open class RMRPullToRefreshController: NSObject {
         self.subscribeOnScrollViewEvents()
     }
     
-    fileprivate func configureBackgroundView(_ backgroundView: UIView) {
+    private func configureBackgroundView(_ backgroundView: UIView) {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         scrollView?.addSubview(backgroundView)
         addBackgroundViewConstraints(backgroundView)
     }
     
-    fileprivate func addBackgroundViewConstraints(_ backgroundView: UIView) {
+    private func addBackgroundViewConstraints(_ backgroundView: UIView) {
         // Constraints
         self.backgroundViewHeightConstraint = NSLayoutConstraint(item: backgroundView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: 0)
         backgroundView.addConstraint(self.backgroundViewHeightConstraint!)
@@ -84,7 +84,7 @@ open class RMRPullToRefreshController: NSObject {
         }
     }
     
-    fileprivate func configureHeight() {
+    private func configureHeight() {
         
         if let scrollView = self.scrollView {
             self.originalTopInset = scrollView.contentInset.top
@@ -208,23 +208,23 @@ open class RMRPullToRefreshController: NSObject {
         containerView.startLoadingAnimation(startProgress)
     }
     
-    @objc fileprivate func stopAllAnimations() {
+    @objc private func stopAllAnimations() {
         if shouldHideWhenStopLoading() {
             stopped = true
         }
         containerView.stopAllAnimations(shouldHideWhenStopLoading())
     }
     
-    @objc fileprivate func forceStopAllAnimations() {
+    @objc private func forceStopAllAnimations() {
         stopped = true
         containerView.stopAllAnimations(true)
     }
     
-    @objc fileprivate func resetBackgroundViewHeightConstraint() {
+    @objc private func resetBackgroundViewHeightConstraint() {
         backgroundViewHeightConstraint?.constant = 0
     }
     
-    fileprivate func scrollViewDidChangePanState(_ scrollView: UIScrollView, panState: UIGestureRecognizerState) {
+    private func scrollViewDidChangePanState(_ scrollView: UIScrollView, panState: UIGestureRecognizerState) {
         if panState == .ended || panState == .cancelled || panState == .failed {
             
             if state == .loading || (shouldHideWhenStopLoading() && !stopped) {
@@ -255,7 +255,7 @@ open class RMRPullToRefreshController: NSObject {
         }
     }
     
-    fileprivate func scrollViewDidChangeContentSize(_ scrollView: UIScrollView, contentSize: CGSize) {
+    private func scrollViewDidChangeContentSize(_ scrollView: UIScrollView, contentSize: CGSize) {
         updateContainerFrame()
         if position == .bottom {
             self.backgroundViewTopConstraint?.constant = max(scrollView.contentSize.height, scrollView.bounds.height)
@@ -265,7 +265,7 @@ open class RMRPullToRefreshController: NSObject {
         }
     }
     
-    fileprivate func scrollViewDidScroll(_ scrollView: UIScrollView, contentOffset: CGPoint) {
+    private func scrollViewDidScroll(_ scrollView: UIScrollView, contentOffset: CGPoint) {
         
         if state == .loading {
             if scrollView.contentOffset.y >= 0  {
@@ -297,7 +297,7 @@ open class RMRPullToRefreshController: NSObject {
         }
     }
     
-    fileprivate func configureBackgroundHeightConstraint(_ contentOffsetY: CGFloat, contentInset: UIEdgeInsets) {
+    private func configureBackgroundHeightConstraint(_ contentOffsetY: CGFloat, contentInset: UIEdgeInsets) {
         var constant = CGFloat(-1.0)
         if position == .top {
             constant = contentOffsetY + contentInset.top

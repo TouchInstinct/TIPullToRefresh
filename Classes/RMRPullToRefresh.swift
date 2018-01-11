@@ -10,7 +10,7 @@ import UIKit
 
 open class RMRPullToRefresh: NSObject {
 
-    fileprivate var сontroller: RMRPullToRefreshController?
+    private var сontroller: RMRPullToRefreshController?
     
     open var height : CGFloat = RMRPullToRefreshConstants.DefaultHeight {
         didSet {
