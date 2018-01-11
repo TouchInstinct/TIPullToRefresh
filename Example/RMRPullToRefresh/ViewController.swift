@@ -93,8 +93,8 @@ final class ViewController: UIViewController {
             redmadrobot()
         }
         
-        pullToRefresh?.setHideDelay(5.0, result: .success)
-        pullToRefresh?.hideWhenError = false
+        //pullToRefresh?.setHideDelay(5.0, result: .success)
+        //pullToRefresh?.hideWhenError = false
     }
     
     // MARK: - Build example values
