@@ -46,7 +46,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func configurePullToRefresh() {
         
-        pullToRefresh = RMRPullToRefresh(scrollView: tableView, position: position()) { [weak self] _ in
+        pullToRefresh = RMRPullToRefresh(scrollView: tableView, position: position()) { [weak self] in
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(5.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
                 if self?.result == .success {
                     self?.loadMore()
@@ -117,22 +117,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     @IBAction func settings(_ sender: AnyObject) {
-        UIActionSheet(title: "Result type", delegate: self, cancelButtonTitle: nil, destructiveButtonTitle: nil, otherButtonTitles: ".Success", ".NoUpdates", ".Error").show(in: self.view)
-    }
-    
-    // MARK: - UIActionSheetDelegate
-    
-    func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
-        switch buttonIndex {
-        case 0:
-            self.result = .success
-        case 1:
+        let alertController = UIAlertController(title: "Result type", message: nil, preferredStyle: .actionSheet)
+        
+        let successAction = UIAlertAction(title: "Success", style: .default) { _ in
             self.result = .noUpdates
-        case 2:
-            self.result = .error
-        default:
-            break;
         }
+        alertController.addAction(successAction)
+        
+        let noUpdatesAction = UIAlertAction(title: "No updates", style: .default) { _ in
+            self.result = .noUpdates
+        }
+        alertController.addAction(noUpdatesAction)
+        
+        let errorAction = UIAlertAction(title: "Error", style: .default) { _ in
+            self.result = .error
+        }
+        alertController.addAction(errorAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Test data
