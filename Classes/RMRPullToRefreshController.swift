@@ -382,18 +382,24 @@ open class RMRPullToRefreshController: NSObject {
             return
         }
         
-        self.contentOffsetObservation = scrollView.observe(\.contentOffset, options: [.new]) { scrollView, change in
-            guard let newContentOffset = change.newValue else { return }
-            self.scrollViewDidScroll(scrollView, contentOffset: newContentOffset)
+        self.contentOffsetObservation = scrollView.observe(
+            \.contentOffset,
+            options: [.new]) { [weak self] (scrollView, change) in
+                guard let newContentOffset = change.newValue else { return }
+                self?.scrollViewDidScroll(scrollView, contentOffset: newContentOffset)
         }
         
-        self.contentSizeObservation = scrollView.observe(\.contentSize, options: [.new]) { scrollView, change in
-            guard let newContentSize = change.newValue else { return }
-            self.scrollViewDidChangeContentSize(scrollView, contentSize: newContentSize)
+        self.contentSizeObservation = scrollView.observe(
+            \.contentSize,
+            options: [.new]) { [weak self] (scrollView, change) in
+                guard let newContentSize = change.newValue else { return }
+                self?.scrollViewDidChangeContentSize(scrollView, contentSize: newContentSize)
         }
         
-        self.panStateObservation = scrollView.panGestureRecognizer.observe(\.state, options: [.new]) { panGestureRecognizer, _ in
-            self.scrollViewDidChangePanState(scrollView, panState: panGestureRecognizer.state)
+        self.panStateObservation = scrollView.panGestureRecognizer.observe(
+            \.state,
+            options: [.new]) { [weak self] panGestureRecognizer, _ in
+                self?.scrollViewDidChangePanState(scrollView, panState: panGestureRecognizer.state)
         }
     }
     
