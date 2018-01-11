@@ -1,0 +1,16 @@
+PODS:
+  - RMRPullToRefresh (0.5.0)
+
+DEPENDENCIES:
+  - RMRPullToRefresh (from `../`)
+
+EXTERNAL SOURCES:
+  RMRPullToRefresh:
+    :path: ../
+
+SPEC CHECKSUMS:
+  RMRPullToRefresh: c80bde05dd42c5a32468ab282e18f9f05bc49397
+
+PODFILE CHECKSUM: 6bf08c33e827c034420f4dcfc61024a8ba7eab2f
+
+COCOAPODS: 1.3.1
