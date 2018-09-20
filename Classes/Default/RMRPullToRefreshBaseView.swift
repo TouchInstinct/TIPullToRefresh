@@ -45,18 +45,18 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
     func configureConstraints() {
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         let heightConstraint = NSLayoutConstraint(item: logoImageView,
-                                                  attribute: NSLayoutConstraint.Attribute.height,
-                                                  relatedBy: NSLayoutConstraint.Relation.equal,
+                                                  attribute: NSLayoutAttribute.height,
+                                                  relatedBy: NSLayoutRelation.equal,
                                                   toItem: nil,
-                                                  attribute: NSLayoutConstraint.Attribute.notAnAttribute,
+                                                  attribute: NSLayoutAttribute.notAnAttribute,
                                                   multiplier: 1,
                                                   constant: 50)
         
         let widthConstraint = NSLayoutConstraint(item: logoImageView,
-                                                 attribute: NSLayoutConstraint.Attribute.width,
-                                                 relatedBy: NSLayoutConstraint.Relation.equal,
+                                                 attribute: NSLayoutAttribute.width,
+                                                 relatedBy: NSLayoutRelation.equal,
                                                  toItem: nil,
-                                                 attribute: NSLayoutConstraint.Attribute.notAnAttribute,
+                                                 attribute: NSLayoutAttribute.notAnAttribute,
                                                  multiplier: 1,
                                                  constant: 50)
         
@@ -64,7 +64,7 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
         
         let verticalConstraint = NSLayoutConstraint(item: logoImageView,
                                                     attribute: .centerY,
-                                                    relatedBy: NSLayoutConstraint.Relation.equal,
+                                                    relatedBy: NSLayoutRelation.equal,
                                                     toItem: self,
                                                     attribute: .centerY,
                                                     multiplier: 1,
@@ -72,7 +72,7 @@ class RMRPullToRefreshBaseView: RMRPullToRefreshView {
         
         let horizontalConstraint = NSLayoutConstraint(item: logoImageView,
                                                       attribute: .centerX,
-                                                      relatedBy: NSLayoutConstraint.Relation.equal,
+                                                      relatedBy: NSLayoutRelation.equal,
                                                       toItem: self,
                                                       attribute: .centerX,
                                                       multiplier: 1,

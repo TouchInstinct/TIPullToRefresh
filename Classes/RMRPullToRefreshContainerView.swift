@@ -25,10 +25,10 @@ open class RMRPullToRefreshContainerView: UIView {
         if let view = obtainView(state, result: result) {
             view.translatesAutoresizingMaskIntoConstraints = false
             addSubview(view)
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutConstraint.Attribute.left))
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutConstraint.Attribute.top))
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutConstraint.Attribute.right))
-            addConstraint(constraint(self, subview: view, attribute: NSLayoutConstraint.Attribute.bottom))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.left))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.top))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.right))
+            addConstraint(constraint(self, subview: view, attribute: NSLayoutAttribute.bottom))
             view.layoutIfNeeded()
             self.currentView = view
         }
@@ -84,7 +84,7 @@ open class RMRPullToRefreshContainerView: UIView {
     
     // MARK: - Constraint
     
-    func constraint(_ superview: UIView, subview: UIView, attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item: subview, attribute: attribute, relatedBy: NSLayoutConstraint.Relation.equal, toItem: superview, attribute: attribute, multiplier: 1, constant: 0)
+    func constraint(_ superview: UIView, subview: UIView, attribute: NSLayoutAttribute) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item: subview, attribute: attribute, relatedBy: NSLayoutRelation.equal, toItem: superview, attribute: attribute, multiplier: 1, constant: 0)
     }
 }

@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   spec.name         = "RMRPullToRefresh"
-  spec.version      = "0.6.0"
-  spec.platform     = :ios, "9.0"
+  spec.version      = "0.5.0"
+  spec.platform     = :ios, "8.0"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.summary      = "A pull to refresh control for UIScrollView (UITableView and UICollectionView)"
   spec.homepage     = "http://redmadrobot.com/"
