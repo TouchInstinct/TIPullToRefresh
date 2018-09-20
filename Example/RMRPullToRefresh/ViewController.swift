@@ -46,15 +46,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func configurePullToRefresh() {
         
-        pullToRefresh = RMRPullToRefresh(scrollView: tableView, position: position()) { [weak self] _ in
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(5.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-                if self?.result == .success {
-                    self?.loadMore()
-                }
-                if let result = self?.result {
-                    self?.pullToRefresh?.stopLoading(result)
-                }
-            })
+        pullToRefresh = RMRPullToRefresh(
+            scrollView: tableView,
+            position: position()) { [weak self] in
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(5.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
+                    if self?.result == .success {
+                        self?.loadMore()
+                    }
+                    if let result = self?.result {
+                        self?.pullToRefresh?.stopLoading(result)
+                    }
+                })
         }
         
         if exampleType == .perekrestokTop || exampleType == .perekrestokBottom {
