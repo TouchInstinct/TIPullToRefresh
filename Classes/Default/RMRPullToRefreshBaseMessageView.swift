@@ -39,10 +39,10 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
         messageView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        for attribute in [NSLayoutAttribute.top, NSLayoutAttribute.right, NSLayoutAttribute.left, NSLayoutAttribute.bottom] {
+        for attribute in [NSLayoutConstraint.Attribute.top, NSLayoutConstraint.Attribute.right, NSLayoutConstraint.Attribute.left, NSLayoutConstraint.Attribute.bottom] {
             messageView.addConstraint(NSLayoutConstraint(item: label,
                                                     attribute: attribute,
-                                                    relatedBy: NSLayoutRelation.equal,
+                                                    relatedBy: NSLayoutConstraint.Relation.equal,
                                                        toItem: messageView,
                                                     attribute: attribute,
                                                    multiplier: 1,
@@ -58,18 +58,18 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
         messageView.translatesAutoresizingMaskIntoConstraints = false
         
         let heightConstraint = NSLayoutConstraint(item: messageView,
-                                                  attribute: NSLayoutAttribute.height,
-                                                  relatedBy: NSLayoutRelation.equal,
+                                                  attribute: NSLayoutConstraint.Attribute.height,
+                                                  relatedBy: NSLayoutConstraint.Relation.equal,
                                                   toItem: nil,
-                                                  attribute: NSLayoutAttribute.notAnAttribute,
+                                                  attribute: NSLayoutConstraint.Attribute.notAnAttribute,
                                                   multiplier: 1,
                                                   constant: 30)
         
         let widthConstraint = NSLayoutConstraint(item: messageView,
-                                                 attribute: NSLayoutAttribute.width,
-                                                 relatedBy: NSLayoutRelation.equal,
+                                                 attribute: NSLayoutConstraint.Attribute.width,
+                                                 relatedBy: NSLayoutConstraint.Relation.equal,
                                                  toItem: nil,
-                                                 attribute: NSLayoutAttribute.notAnAttribute,
+                                                 attribute: NSLayoutConstraint.Attribute.notAnAttribute,
                                                  multiplier: 1,
                                                  constant: 150)
         
@@ -77,7 +77,7 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
         
         let verticalConstraint = NSLayoutConstraint(item: messageView,
                                                     attribute: .centerY,
-                                                    relatedBy: NSLayoutRelation.equal,
+                                                    relatedBy: NSLayoutConstraint.Relation.equal,
                                                     toItem: self,
                                                     attribute: .centerY,
                                                     multiplier: 1,
@@ -85,7 +85,7 @@ class RMRPullToRefreshBaseMessageView: RMRPullToRefreshBaseView {
         
         let leftConstraint = NSLayoutConstraint(item: messageView,
                                                 attribute: .left,
-                                                relatedBy: NSLayoutRelation.equal,
+                                                relatedBy: NSLayoutConstraint.Relation.equal,
                                                 toItem: self,
                                                 attribute: .right,
                                                 multiplier: 1,

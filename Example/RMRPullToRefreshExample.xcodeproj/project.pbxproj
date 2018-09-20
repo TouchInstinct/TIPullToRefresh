@@ -132,7 +132,6 @@
 				89CB12311C9DA07B00048E46 /* Frameworks */,
 				89CB12321C9DA07B00048E46 /* Resources */,
 				2BE863C51DEA329C1234F1B0 /* [CP] Embed Pods Frameworks */,
-				C137BE069515EFF1A69455DF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -227,21 +226,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RMRPullToRefreshExample/Pods-RMRPullToRefreshExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C137BE069515EFF1A69455DF /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RMRPullToRefreshExample/Pods-RMRPullToRefreshExample-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -389,7 +373,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redmadrobot.RMRPullToRefresh;
 				PRODUCT_NAME = RMRPullToRefreshExample;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -403,7 +387,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redmadrobot.RMRPullToRefresh;
 				PRODUCT_NAME = RMRPullToRefreshExample;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

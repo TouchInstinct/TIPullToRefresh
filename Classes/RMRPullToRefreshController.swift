@@ -230,7 +230,7 @@ open class RMRPullToRefreshController: NSObject {
         backgroundViewHeightConstraint?.constant = 0
     }
     
-    private func scrollViewDidChangePanState(_ scrollView: UIScrollView, panState: UIGestureRecognizerState) {
+    private func scrollViewDidChangePanState(_ scrollView: UIScrollView, panState: UIGestureRecognizer.State) {
         if panState == .ended || panState == .cancelled || panState == .failed {
             
             if state == .loading || (shouldHideWhenStopLoading() && !stopped) {
@@ -277,7 +277,7 @@ open class RMRPullToRefreshController: NSObject {
             if scrollView.contentOffset.y >= 0  {
                 scrollView.contentInset = UIEdgeInsets.zero
             } else {
-                scrollView.contentInset = UIEdgeInsetsMake(min(-scrollView.contentOffset.y, originalTopInset+height),0,0,0)
+                scrollView.contentInset = UIEdgeInsets.init(top: min(-scrollView.contentOffset.y, originalTopInset+height),left: 0,bottom: 0,right: 0)
             }
         }
         
@@ -353,7 +353,7 @@ open class RMRPullToRefreshController: NSObject {
         changingContentInset = true
         UIView.animate(withDuration: 0.3,
             delay: 0.0,
-            options: UIViewAnimationOptions.beginFromCurrentState,
+            options: UIView.AnimationOptions.beginFromCurrentState,
             animations: {  [weak self]() -> Void in
                 self?.scrollView?.contentInset = contentInset
             }, completion: {  [weak self](finished) -> Void in
