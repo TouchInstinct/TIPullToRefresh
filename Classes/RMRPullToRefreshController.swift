@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class RMRPullToRefreshController: NSObject {
+open class RMRPullToRefreshController {
 
     // MARK: - Vars
     
@@ -48,8 +48,7 @@ open class RMRPullToRefreshController: NSObject {
     // MARK: - Init
     
     init(scrollView: UIScrollView, position:RMRPullToRefreshPosition, actionHandler: @escaping () -> Void) {
-
-        super.init()        
+ 
         self.scrollView = scrollView
         self.actionHandler = actionHandler
         self.position = position
@@ -157,9 +156,14 @@ open class RMRPullToRefreshController: NSObject {
                     }
                 }
                 self?.contentSizeWhenStartLoading = nil
-                self?.perform(#selector(self?.resetBackgroundViewHeightConstraint), with: nil, afterDelay: afterDelay)
+                
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + afterDelay) {
+                    self?.resetBackgroundViewHeightConstraint()
+                }
             }
-            self?.perform(#selector(self?.stopAllAnimations), with: nil, afterDelay: afterDelay)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + afterDelay) {
+                self?.stopAllAnimations()
+            }
         })
     }
     

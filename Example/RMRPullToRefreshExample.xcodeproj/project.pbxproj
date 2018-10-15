@@ -372,8 +372,10 @@
 			baseConfigurationReference = 51A8D36C5CCC1E18D2666CD6 /* Pods-RMRPullToRefreshExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GMD7EK7S94;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RMRPullToRefresh/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redmadrobot.RMRPullToRefresh;
 				PRODUCT_NAME = RMRPullToRefreshExample;
@@ -386,8 +388,10 @@
 			baseConfigurationReference = 9373B01A0C7A0314295D05D2 /* Pods-RMRPullToRefreshExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GMD7EK7S94;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = RMRPullToRefresh/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.redmadrobot.RMRPullToRefresh;
 				PRODUCT_NAME = RMRPullToRefreshExample;
