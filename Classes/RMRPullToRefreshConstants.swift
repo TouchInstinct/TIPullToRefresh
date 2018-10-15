@@ -27,14 +27,6 @@ public enum RMRPullToRefreshResultType: Int {
 
 public struct RMRPullToRefreshConstants {
     
-    struct KeyPaths {
-        static let ContentOffset = "contentOffset"
-        static let ContentSize = "contentSize"
-        static let ContentInset = "contentInset"
-        static let PanState = "pan.state"
-        static let Frame = "frame"
-    }
-    
     static let DefaultHeight = CGFloat(90.0)
     static let DefaultBackgroundColor = UIColor.white
 }

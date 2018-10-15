@@ -7,26 +7,6 @@
 //
 
 import UIKit
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 open class RMRPullToRefreshController {
 
@@ -41,7 +21,6 @@ open class RMRPullToRefreshController {
     var backgroundViewTopConstraint: NSLayoutConstraint?
     
     var stopped = true
-    var subscribing = false
     
     var actionHandler: (() -> Void)!
     
@@ -60,6 +39,12 @@ open class RMRPullToRefreshController {
     
     open var hideWhenError: Bool = true
     
+    // MARK: - Observation
+    
+    private var contentOffsetObservation: NSKeyValueObservation?
+    private var contentSizeObservation: NSKeyValueObservation?
+    private var panStateObservation: NSKeyValueObservation?
+    
     // MARK: - Init
     
     init(scrollView: UIScrollView, position:RMRPullToRefreshPosition, actionHandler: @escaping () -> Void) {
@@ -76,30 +61,36 @@ open class RMRPullToRefreshController {
         self.subscribeOnScrollViewEvents()
     }
     
-    fileprivate func configureBackgroundView(_ backgroundView: UIView) {
+    private func configureBackgroundView(_ backgroundView: UIView) {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         scrollView?.addSubview(backgroundView)
         addBackgroundViewConstraints(backgroundView)
     }
     
-    fileprivate func addBackgroundViewConstraints(_ backgroundView: UIView) {
-        // Constraints
-        self.backgroundViewHeightConstraint = NSLayoutConstraint(item: backgroundView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 0)
-        backgroundView.addConstraint(self.backgroundViewHeightConstraint!)
+    private func addBackgroundViewConstraints(_ backgroundView: UIView) {
+        guard let scrollView = scrollView, let position = position else {
+            return
+        }
+    
+        let backgroundViewHeightConstraint = backgroundView.heightAnchor.constraint(equalToConstant: 0)
+        backgroundViewHeightConstraint.isActive = true
+        self.backgroundViewHeightConstraint = backgroundViewHeightConstraint
         
-        scrollView?.addConstraint(NSLayoutConstraint(item: backgroundView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: scrollView, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0))
+        backgroundView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         
-        if position == .top {
-            scrollView?.addConstraint(NSLayoutConstraint(item: backgroundView, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: scrollView, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0))
-        } else if position == .bottom, let scrollView = self.scrollView {
+        switch position {
+        case .top:
+            backgroundView.bottomAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        case .bottom:
             let constant = max(scrollView.contentSize.height, scrollView.bounds.height)
-            self.backgroundViewTopConstraint = NSLayoutConstraint(item: backgroundView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: scrollView, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: constant)
-            scrollView.addConstraint(self.backgroundViewTopConstraint!)
+            let backgroundViewTopConstraint = backgroundView.topAnchor.constraint(
+                equalTo: scrollView.bottomAnchor, constant: constant)
+            backgroundViewTopConstraint.isActive = true
+            self.backgroundViewTopConstraint = backgroundViewTopConstraint
         }
     }
     
-    fileprivate func configureHeight() {
-        
+    private func configureHeight() {
         if let scrollView = self.scrollView {
             self.originalTopInset = scrollView.contentInset.top
             self.originalBottomInset = scrollView.contentInset.bottom
@@ -227,23 +218,23 @@ open class RMRPullToRefreshController {
         containerView.startLoadingAnimation(startProgress)
     }
     
-    @objc fileprivate func stopAllAnimations() {
+    @objc private func stopAllAnimations() {
         if shouldHideWhenStopLoading() {
             stopped = true
         }
         containerView.stopAllAnimations(shouldHideWhenStopLoading())
     }
     
-    @objc fileprivate func forceStopAllAnimations() {
+    @objc private func forceStopAllAnimations() {
         stopped = true
         containerView.stopAllAnimations(true)
     }
     
-    @objc fileprivate func resetBackgroundViewHeightConstraint() {
+    @objc private func resetBackgroundViewHeightConstraint() {
         backgroundViewHeightConstraint?.constant = 0
     }
     
-    fileprivate func scrollViewDidChangePanState(_ scrollView: UIScrollView, panState: UIGestureRecognizer.State) {
+    private func scrollViewDidChangePanState(_ scrollView: UIScrollView, panState: UIGestureRecognizer.State) {
         if panState == .ended || panState == .cancelled || panState == .failed {
             
             if state == .loading || (shouldHideWhenStopLoading() && !stopped) {
@@ -274,7 +265,7 @@ open class RMRPullToRefreshController {
         }
     }
     
-    fileprivate func scrollViewDidChangeContentSize(_ scrollView: UIScrollView, contentSize: CGSize) {
+    private func scrollViewDidChangeContentSize(_ scrollView: UIScrollView, contentSize: CGSize) {
         updateContainerFrame()
         if position == .bottom {
             self.backgroundViewTopConstraint?.constant = max(scrollView.contentSize.height, scrollView.bounds.height)
@@ -284,7 +275,7 @@ open class RMRPullToRefreshController {
         }
     }
     
-    fileprivate func scrollViewDidScroll(_ scrollView: UIScrollView, contentOffset: CGPoint) {
+    private func scrollViewDidScroll(_ scrollView: UIScrollView, contentOffset: CGPoint) {
         
         if state == .loading {
             if scrollView.contentOffset.y >= 0  {
@@ -316,15 +307,17 @@ open class RMRPullToRefreshController {
         }
     }
     
-    fileprivate func configureBackgroundHeightConstraint(_ contentOffsetY: CGFloat, contentInset: UIEdgeInsets) {
+    private func configureBackgroundHeightConstraint(_ contentOffsetY: CGFloat, contentInset: UIEdgeInsets) {
         var constant = CGFloat(-1.0)
         if position == .top {
             constant = contentOffsetY + contentInset.top
         } else {
             constant = contentOffsetY + contentInset.bottom
         }
-        if constant > 0 && constant > backgroundViewHeightConstraint?.constant {
-            backgroundViewHeightConstraint?.constant = constant
+        if let backgroundViewHeightConstraint = backgroundViewHeightConstraint,
+            constant > 0,
+            constant > backgroundViewHeightConstraint.constant {
+            backgroundViewHeightConstraint.constant = constant
         }
     }
     
@@ -393,34 +386,36 @@ open class RMRPullToRefreshController {
     }
     
     // MARK: - KVO
-    
-    var contentOffsetObservation: NSKeyValueObservation?
-    var contentSizeObservation: NSKeyValueObservation?
 
     open func subscribeOnScrollViewEvents() {
-        guard let scrollView = self.scrollView else { return }
-        
-        contentOffsetObservation = scrollView.observe(\.contentOffset, options: .new) { [weak self] scrollView, changes in
-            guard let newContentOffset = changes.newValue else { return }
-            self?.scrollViewDidScroll(scrollView, contentOffset: newContentOffset)
+        guard let scrollView = scrollView else {
+            return
         }
         
-        contentSizeObservation = scrollView.observe(\.contentSize, options: .new) { [weak self] scrollView, changes in
-            guard let newContentSize = changes.newValue else { return }
-            self?.scrollViewDidChangeContentSize(scrollView, contentSize: newContentSize)
+        self.contentOffsetObservation = scrollView.observe(
+            \.contentOffset,
+            options: [.new]) { [weak self] (scrollView, change) in
+                guard let newContentOffset = change.newValue else { return }
+                self?.scrollViewDidScroll(scrollView, contentOffset: newContentOffset)
         }
         
-        self.scrollView?.panGestureRecognizer.addTarget(self, action: #selector(onPanGesture))
-    }
-    
-    @objc func onPanGesture(gesture: UIPanGestureRecognizer) {
-        guard let scrollView = self.scrollView else { return }
-        scrollViewDidChangePanState(scrollView, panState: gesture.state)
+        self.contentSizeObservation = scrollView.observe(
+            \.contentSize,
+            options: [.new]) { [weak self] (scrollView, change) in
+                guard let newContentSize = change.newValue else { return }
+                self?.scrollViewDidChangeContentSize(scrollView, contentSize: newContentSize)
+        }
+        
+        self.panStateObservation = scrollView.panGestureRecognizer.observe(
+            \.state,
+            options: [.new]) { [weak self] panGestureRecognizer, _ in
+                self?.scrollViewDidChangePanState(scrollView, panState: panGestureRecognizer.state)
+        }
     }
     
     open func unsubscribeFromScrollViewEvents() {
-        contentOffsetObservation = nil
-        contentSizeObservation = nil
+        contentOffsetObservation?.invalidate()
+        contentSizeObservation?.invalidate()
+        panStateObservation?.invalidate()
     }
-    
 }

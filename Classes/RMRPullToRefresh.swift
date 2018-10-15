@@ -10,7 +10,7 @@ import UIKit
 
 open class RMRPullToRefresh: NSObject {
 
-    fileprivate var сontroller: RMRPullToRefreshController?
+    private var сontroller: RMRPullToRefreshController?
     
     open var height : CGFloat = RMRPullToRefreshConstants.DefaultHeight {
         didSet {
@@ -44,14 +44,6 @@ open class RMRPullToRefresh: NSObject {
         
         scrollView.addSubview(controller.containerView)
         self.сontroller = controller
-    }
-    
-    /// Метод нужно вызывать в deinit экрана, в котором используется pull-to-refresh.
-    ///
-    /// Это временное решение для избежания краша из-за KVO-наблюдателей на scroll view
-    /// (при уничтожении скролла и экрана, в котором он лежит).
-    open func unsubscribeFromBindings() {
-        сontroller?.unsubscribeFromScrollViewEvents()
     }
     
     open func configureView(_ view :RMRPullToRefreshView, state:RMRPullToRefreshState, result:RMRPullToRefreshResultType) {

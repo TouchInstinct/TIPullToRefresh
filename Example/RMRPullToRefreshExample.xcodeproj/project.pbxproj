@@ -148,14 +148,13 @@
 		89CB122C1C9DA07B00048E46 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Merkulov Ilya";
 				TargetAttributes = {
 					89CB12331C9DA07B00048E46 = {
 						CreatedOnToolsVersion = 7.2.1;
-						DevelopmentTeam = GMD7EK7S94;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0920;
 					};
 				};
 			};
@@ -363,7 +362,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
